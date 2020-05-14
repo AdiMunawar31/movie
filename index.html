@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D2Y Hut</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+<body class="bg-secondary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <h2 class="text-white">D2Y MOVIE</h2>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav"><a class="btn btn-sm btn-outline-light ml-4" href="">All Menu</a>
+                </div>
+            </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="mt-3 text-center">Search Movie</h1>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Movie..." id="search">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit" id="button">Button</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="container">
+        <div class="row" id="movie-list">
+
+        </div>
+    </div>
+
+
+    <script src="jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>$('#button').on('click', function () {
+            $('#movie-list').html('');
+
+            $.ajax({
+                url: 'http://www.omdbapi.com',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    'apikey': 'ef26f321',
+                    's': $('#search').val()
+                },
+                success: function (result) {
+                    if (result.Response == 'True') {
+                        let movies = result.Search;
+                        $.each(movies, function (i, data) {
+                            $('#movie-list').append(`
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                            <img src="`+ data.Poster + `" class="card-img-top" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">`+ data.Title + `</h5>
+                            <p class="card-text">`+ data.Year + `</p>
+                            <a href="#" class="btn btn-primary">Detail Movie</a>
+                            </div>
+                            </div>
+                        </div>
+                    `);
+                        });
+
+                    } else {
+                        $('#movie-list').append(`
+                        <div class"col">
+                            <h3 class="text-center">`+ result.Error + `</h3>
+                        </div>
+                    `);
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
